@@ -7,12 +7,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
-app.get("/", (_, res) => {
-    res.send("Hello");
-});
-
 app.get("/movies", async (_, res) => {
-    // res.send("Listagem de filmes");
     const movies = await prisma.movie.findMany({
         orderBy: {
             title: "asc"
@@ -40,6 +35,20 @@ app.post("/movies", async (req, res) => {
     //     },
     // });
     try {
+        //verificar no banco se já tem filme com o mesmo nome
+        const movieWithSameName = await prisma.movie.findFirst({
+            where: {
+                title: {
+                    equals: title,
+                    mode: "insensitive"
+                }
+            },
+        });
+
+        if (movieWithSameName) {
+            return res.status(409).send({ message: "It already exists a movie with that title" });
+        }
+
         await prisma.movie.create({
             data: {
                 //como os nomes da propriedade e do valor são exatamente iguais, poderia omitir um deles para ficar menos código.
