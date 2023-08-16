@@ -97,6 +97,54 @@ app.put("/movies/:id", async (req, res) => {
 
 });
 
+app.delete("/movies/:id", async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const movie = await prisma.movie.findUnique({
+            where: { id },
+        });
+        if (!movie) {
+            return res.status(404).send({ message: "Movie not found" });
+        }
+
+        await prisma.movie.delete({
+            where: { id },
+        });
+    } catch (error) {
+        return res.status(500).send({ message: "Failed to delete register" });
+    }
+
+    res.status(200).send();
+});
+
+app.get("/movies/:genderName", async (req, res) => {
+    // console.log(req.params.genderName);
+    const genderName = req.params.genderName;
+    try {
+        //filtrar filmes do banco pelo gênero
+        const moviesFilteredByGenderName = await prisma.movie.findMany({
+            include: {
+                genders: true,
+                languages: true,
+            },
+            where: {
+                genders: {
+                    name: {
+                        equals: genderName,
+                        mode: "insensitive",
+                    }
+                }
+            }
+        });
+        res.status(200).send(moviesFilteredByGenderName);
+    } catch (error) {
+        return res.status(500).send({ message: "Failed do update movie" });
+    }
+    //retornar filmes filtrados
+
+
+});
+
 app.listen(3000, () => {
     console.log(`Server listening on port ${port}`);
 });
