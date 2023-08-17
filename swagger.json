@@ -1,0 +1,91 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Moviefliex API",
+        "description": "API responsible for managing movies from Movieflix",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/movies": {
+            "get": {
+                "tags": ["Movie"],
+                "summary": "Returns a list of movies.",
+                "responses": {
+                    "200": {
+                        "description": "Returns a list of movies",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Movie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Movie": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "movie ID"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "movie title"
+                    },
+                    "gender_id": {
+                        "type": "integer",
+                        "description": "movie gender"
+                    },
+                    "genders": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "description": "gender ID"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "gender name"
+                            }
+                        }
+                    },
+                    "language_id": {
+                        "type": "integer",
+                        "description": "movie language"
+                    },
+                    "languages": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "description": "language ID"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "language name"
+                            }
+                        }
+                    },
+                    "oscar_count": {
+                        "type": "integer",
+                        "description": "how many Oscars the movie won"
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "release date of the movie"
+                    }
+                }
+            }
+        }
+    }
+}
